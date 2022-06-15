@@ -1,0 +1,40 @@
+name: workflow-crafty-4-sync
+
+env:
+  # Required, URL to upstream (fork base)
+  UPSTREAM_URL: "https://gitlab.com/crafty-controller/crafty-4.git"
+  # Required, token to authenticate bot, could use ${{ secrets.GITHUB_TOKEN }}
+  # Over here, we use a PAT instead to authenticate workflow file changes.
+  WORKFLOW_TOKEN: ${{ secrets.TDB_PAT }}
+  # Optional, defaults to main
+  UPSTREAM_BRANCH: "master"
+  # Optional, defaults to UPSTREAM_BRANCH
+  DOWNSTREAM_BRANCH: "master"
+  # Optional merge arguments
+  MERGE_ARGS: "-X theirs"
+  # Optional push arguments
+  PUSH_ARGS: ""
+
+on:
+  schedule:
+    # run at midnight every day
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout - required for 'keepalive-workflow'
+        uses: actions/checkout@v2
+      - name: Sync GitHub/GitLab upstream Repository changes with this repo
+        uses: dabreadman/sync-upstream-repo@v1.0.0.b
+        with:
+          upstream_repo: ${{ env.UPSTREAM_URL }}
+          upstream_branch: ${{ env.UPSTREAM_BRANCH }}
+          downstream_branch: ${{ env.DOWNSTREAM_BRANCH }}
+          token: ${{ env.WORKFLOW_TOKEN }}
+          merge_args: ${{ env.MERGE_ARGS }}
+          push_args: ${{ env.PUSH_ARGS }}
+      - name: Prevent GitHub from disabling sync after 60 days
+        uses: gautamkrishnar/keepalive-workflow@master

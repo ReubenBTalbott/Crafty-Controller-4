@@ -11,7 +11,7 @@ env:
   # Optional, defaults to UPSTREAM_BRANCH
   DOWNSTREAM_BRANCH: "master"
   # Optional merge arguments
-  MERGE_ARGS: "-X theirs"
+  MERGE_ARGS: "-X theirs --allow-unrelated-histories"
   # Optional push arguments
   PUSH_ARGS: ""
 

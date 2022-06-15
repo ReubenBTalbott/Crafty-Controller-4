@@ -40,5 +40,5 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            reubentalbott/Crafty-Controller-4:latest
-            ghcr.io/ReubenBTalbott/Crafty-Controller-4:latest
+            reubentalbott/crafty-controller-4:latest
+            ghcr.io/ReubenBTalbott/crafty-controller-4:latest

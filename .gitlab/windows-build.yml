@@ -54,7 +54,6 @@ win-prod-build:
   environment:
     name: production
   script:
-    - echo "${CI_JOB_ID}" > CI_JOB_ID.txt
     - |
       $ErrorActionPreference = "Stop"
       py -m venv .venv
@@ -73,6 +72,8 @@ win-prod-build:
       --collect-all tzdata
       --collect-all pytz
       --collect-all six
+  after_script:
+    - Add-Content -Path job.env -Value "JOB_ID=$CI_JOB_ID"
 
   # Download latest:
   # | https://gitlab.com/crafty-controller/crafty-4/-/jobs/artifacts/master/download?job=win-prod-build
@@ -81,7 +82,8 @@ win-prod-build:
     paths:
       - app\
       - .\crafty_commander.exe
-      - CI_JOB_ID.txt
     expire_in: never
     exclude:
       - app\classes\**\*
+    reports:
+      dotenv: job.env
